@@ -21,4 +21,26 @@ export class BookService {
         .execute()
     }
 
+    async updateBooks (id:string,body:any):Promise<void> {
+        await this.typeorm.createQueryBuilder()
+        .update(BooksRepository)
+        .set({
+            title: body.title
+        })
+        .where({
+            id:id
+        })
+        .execute()
+    }
+
+    async deleteBook (id:string):Promise<void> {
+        await this.typeorm.createQueryBuilder()
+        .delete()
+        .from(BooksRepository)
+        .where({
+            id:id
+        })
+        .execute()
+    }
+
 }
