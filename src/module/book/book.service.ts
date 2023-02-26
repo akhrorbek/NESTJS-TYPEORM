@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository} from '@nestjs/typeorm'
 import { BooksRepository } from 'src/entities/books.entity';
@@ -22,6 +23,11 @@ export class BookService {
     }
 
     async updateBooks (id:string,body:any):Promise<void> {
+        const books = await this.typeorm.find()
+        const foundBook = books.find(e => e.id == id)
+        if(!foundBook) {
+            throw new NotFoundException()
+        }
         await this.typeorm.createQueryBuilder()
         .update(BooksRepository)
         .set({
@@ -34,6 +40,12 @@ export class BookService {
     }
 
     async deleteBook (id:string):Promise<void> {
+
+        const books = await this.typeorm.find()
+        const foundBook = books.find(e => e.id == id)
+        if(!foundBook) {
+            throw new NotFoundException()
+        }
         await this.typeorm.createQueryBuilder()
         .delete()
         .from(BooksRepository)
